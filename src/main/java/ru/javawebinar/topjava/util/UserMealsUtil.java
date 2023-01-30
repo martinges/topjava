@@ -27,15 +27,14 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-//исправлено. Добавил метод .getDayOfYear() возвращает число int - день, уникальное значение в рамках года
-        Map<Integer, Integer> mapCaloriesPerDay = new HashMap<>(); //исправлено. Мапа хранит сумму калорий за конкретный день
+        Map<Integer, Integer> mapCaloriesPerDay = new HashMap<>();
         for (UserMeal meal : meals) {
             mapCaloriesPerDay.put(meal.getDateTime().getDayOfYear(), mapCaloriesPerDay.getOrDefault(meal.getDateTime().getDayOfYear(), 0) + meal.getCalories());
         }
         List<UserMealWithExcess> mealsWithExcess = new ArrayList<>();
         for (UserMeal meal : meals) {
             if (TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime)) {
-                mealsWithExcess.add(new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), caloriesPerDay >= mapCaloriesPerDay.get(meal.getDateTime().getDayOfYear())));
+                mealsWithExcess.add(new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(), caloriesPerDay < mapCaloriesPerDay.get(meal.getDateTime().getDayOfYear())));
             }
         }
         return mealsWithExcess;
