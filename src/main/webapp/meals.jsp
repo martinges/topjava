@@ -17,19 +17,19 @@
     <th></th>
 
     <c:forEach var="meal" items="${mealTo}">
-        <c:if test="${meal.isExcess() == 'true'}" >
+        <c:if test="${meal.isExcess() == 'true'}">
             <tr style="color:#FF0000">
         </c:if>
-        <c:if test="${meal.isExcess() == 'false'}" >
+        <c:if test="${meal.isExcess() == 'false'}">
             <tr style="color:#00ff00">
         </c:if>
-        <td><fmt:parseDate value="${meal.getDateTime()}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both" />
-            <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${parsedDateTime}" /></td>
+        <td><fmt:parseDate value="${meal.getDateTime()}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime" type="both"/>
+            <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${parsedDateTime}"/></td>
 
-        <td><c:out value="${meal.getDescription()}" /></td>
+        <td><c:out value="${meal.getDescription()}"/></td>
 
-        <td><c:out value="${meal.getCalories()}" /></td>
-    </tr>
+        <td><c:out value="${meal.getCalories()}"/></td>
+        </tr>
     </c:forEach>
 
 </table>
