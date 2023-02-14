@@ -1,57 +1,54 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<html lang="ru">
+<%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>
+<%--<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>--%>
+<html>
 <head>
-    <title>Meals</title>
+    <title>Meal list</title>
     <style>
-        table {
-            width: 100%; /* Ширина таблицы */
-            border: 1px double black; /* Рамка вокруг таблицы */
-            border-collapse: collapse; /* Отображать только одинарные линии */
+        .normal {
+            color: green;
         }
 
-        th {
-            text-align: center; /* Выравнивание по левому краю */
-            background: #fff; /* Цвет фона ячеек */
-            padding: 1px; /* Поля вокруг содержимого ячеек */
-            border: 1px solid black; /* Граница вокруг ячеек */
-        }
-
-        td {
-            padding: 1px; /* Поля вокруг содержимого ячеек */
-            border: 1px solid black; /* Граница вокруг ячеек */
+        .excess {
+            color: red;
         }
     </style>
 </head>
 <body>
-<h3><a href="index.html">Home</a></h3>
-<hr>
-<h2>Meals</h2>
-<table>
-    <tr>
-        <th>Date</th>
-        <th>Description</th>
-        <th>Calories</th>
-        <th></th>
-        <th></th>
-    </tr>
-    <c:forEach var="mealTo" items="${listMealsTo}">
-        <c:if test="${(mealTo.isExcess() == 'true')}">
-            <tr style="color: #ff0000">
-        </c:if>
-        <c:if test="${(mealTo.isExcess() != 'true')}">
-            <tr style="color: #00ff00">
-        </c:if>
-        <td><fmt:parseDate value="${mealTo.getDateTime()}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime"
-                           type="both"/>
-            <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }"/></td>
-        <td><c:out value="${mealTo.getDescription()}"/></td>
-        <td><c:out value="${mealTo.getCalories()}"/></td>
-        <td>Update</td>
-        <td>Delete</td>
+<section>
+    <h3><a href="index.html">Home</a></h3>
+    <hr/>
+    <h2>Meals</h2>
+    <a href="meals?action=create">Add Meal</a>
+    <br><br>
+    <table border="1" cellpadding="8" cellspacing="0">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Calories</th>
+            <th></th>
+            <th></th>
         </tr>
-    </c:forEach>
-</table>
+        </thead>
+        <c:forEach items="${requestScope.meals}" var="meal">
+            <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
+            <tr class="${meal.excess ? 'excess' : 'normal'}">
+                <td>
+                        <%--${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}--%>
+                        <%--<%=TimeUtil.toString(meal.getDateTime())%>--%>
+                        <%--${fn:replace(meal.dateTime, 'T', ' ')}--%>
+                        ${fn:formatDateTime(meal.dateTime)}
+                </td>
+                <td>${meal.description}</td>
+                <td>${meal.calories}</td>
+                <td><a href="meals?action=update&id=${meal.id}">Update</a></td>
+                <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
+            </tr>
+        </c:forEach>
+    </table>
+</section>
 </body>
 </html>
